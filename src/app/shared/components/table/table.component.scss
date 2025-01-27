@@ -1,0 +1,112 @@
+// Base table styles
+table {
+  width: 75%;
+  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-spacing: 0;
+  overflow: hidden;
+}
+// Table header styles
+thead {
+  background-color: #3f51b5;
+  color: #ffffff;
+}
+thead th {
+  padding: 16px;
+  font-family: "Roboto", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+// Table body styles
+tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s, box-shadow 0.2s;
+}
+tbody tr:hover {
+  background-color: #f5f5f5;
+}
+tbody tr.editing {
+  background-color: #e3f2fd;
+}
+// Table cell styles
+td {
+  padding: 16px;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 14px;
+  color: #212121;
+  word-wrap: break-word;
+  vertical-align: middle;
+}
+input[type="text"] {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+// Button styles
+button {
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+button.edit-btn {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+button.edit-btn:hover {
+  background-color: #388e3c;
+}
+button.save-btn {
+  background-color: #ff9800;
+  color: #ffffff;
+}
+button.save-btn:hover {
+  background-color: #f57c00;
+}
+button:hover {
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
+}
+
+.invalid-input {
+  border: 1px solid red;
+  background-color: #ffdddd;
+}
+
+.save-btn:disabled,
+.save-btn:disabled:hover {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+// Responsive styles
+@media (max-width: 768px) {
+  table {
+    width: 90%;
+    height: auto;
+  }
+  td,
+  th {
+    font-size: 13px;
+    padding: 12px;
+  }
+}
