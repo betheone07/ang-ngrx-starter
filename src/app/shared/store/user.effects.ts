@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../services/user.service';
 import * as UserActions from './user.actions';
-import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
-// import { updateUserSuccess } from './user.actions';
+import { catchError, map, mergeMap, of } from 'rxjs';
 
 @Injectable()
 export class UserEffects {
@@ -36,12 +35,4 @@ export class UserEffects {
       )
     )
   );
-
-  // the public API given doesn't allows edit to existing data, so need to refresh after updating User
-  // updateUserSuccess$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(UserActions.updateUserSuccess),
-  //     switchMap(() => [UserActions.fetchUsers()])
-  //   )
-  // );
 }
