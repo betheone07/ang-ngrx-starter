@@ -1,7 +1,7 @@
-<ng-container *ngIf="formGroup && users$ | async as users">
+<ng-container *ngIf="formGroup && data$ | async as items">
   <form [formGroup]="formGroup">
     <table>
-      <thead *ngIf="users.length">
+      <thead *ngIf="items.length">
         <tr>
           <th *ngFor="let col of columns" [style.width]="col.width">
             {{ col.name }}
@@ -9,17 +9,15 @@
           <th>Action</th>
         </tr>
       </thead>
-      <tbody formArrayName="users">
+      <tbody formArrayName="items">
         <tr
-          *ngFor="let userGroup of usersFormArray.controls; let i = index"
+          *ngFor="let itemGroup of itemsFormArray.controls; let i = index"
           [formGroupName]="i"
         >
           <td *ngFor="let col of columns">
-            <ng-container
-              *ngIf="col.editable && edits.has(users[i].id); else readOnly"
-            >
+            <ng-container *ngIf="col.editable && edits.has(i); else readOnly">
               <input
-                *ngIf="edits.has(users[i].id)"
+                *ngIf="edits.has(i)"
                 [formControlName]="col.key"
                 type="text"
                 [ngClass]="{
@@ -28,24 +26,24 @@
               />
             </ng-container>
             <ng-template #readOnly>
-              <span>{{ usersFormArray.at(i).get(col.key)?.value }}</span>
+              <span>{{ itemsFormArray.at(i).get(col.key)?.value }}</span>
             </ng-template>
           </td>
           <td>
             <button
-              *ngIf="!edits.has(users[i].id)"
+              *ngIf="!edits.has(i)"
               class="edit-btn"
               type="button"
-              (click)="onEdit(users[i])"
+              (click)="onEdit(i)"
             >
               Edit
             </button>
             <button
-              *ngIf="edits.has(users[i].id)"
+              *ngIf="edits.has(i)"
               class="save-btn"
               type="button"
-              (click)="onSave(users[i], i)"
-              [disabled]="usersFormArray.at(i).invalid"
+              (click)="onSave(items[i], i)"
+              [disabled]="itemsFormArray.at(i).invalid"
             >
               Save
             </button>

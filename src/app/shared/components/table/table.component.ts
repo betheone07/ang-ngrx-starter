@@ -6,10 +6,9 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { ColumnOptions } from './column-options';
 import { Observable, tap } from 'rxjs';
-import { User } from '../../types/user.type';
 import { CommonModule } from '@angular/common';
+import { ColumnOptions } from './column-options';
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
@@ -17,58 +16,55 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class TableComponent implements OnInit {
+export class TableComponent<T extends { [key: string]: any }>
+  implements OnInit
+{
   @Input() columns: ColumnOptions[] = [];
-  @Input() users$!: Observable<User[]>;
-  @Output() saveUser: EventEmitter<User> = new EventEmitter<User>();
+  @Input() data$!: Observable<T[]>;
+  @Output() saveItem: EventEmitter<T> = new EventEmitter<T>();
   formGroup!: FormGroup;
   edits = new Set<number>();
   constructor(private fb: FormBuilder) {}
   ngOnInit(): void {
     this.formGroup = this.fb.group({
-      users: this.fb.array([]),
+      items: this.fb.array([]),
     });
-    this.users$ = this.users$.pipe(
-      tap((users) => {
-        const usersFormArray = this.formGroup.get('users') as FormArray;
-        usersFormArray.clear();
-        users.forEach((user) =>
-          usersFormArray.push(this.createIndividualUserFormGroup(user))
+    this.data$ = this.data$.pipe(
+      tap((items) => {
+        const itemsFormArray = this.formGroup.get('items') as FormArray;
+        itemsFormArray.clear();
+        items.forEach((item) =>
+          itemsFormArray.push(this.createIndividualItemFormGroup(item))
         );
       })
     );
   }
-
-  createIndividualUserFormGroup(user: User): FormGroup {
-    const controls: { [key: string]: any } = {};
+  createIndividualItemFormGroup(item: T): FormGroup {
+    const controls: { [key: string]: unknown } = {};
     this.columns.forEach((col) => {
-      // Adding validation for required and email format if the column is 'email'
+      // using required as default validator
       const validators = [Validators.required];
-      if (col.key === 'email') {
-        validators.push(Validators.email);
+      if (col.type === 'email') {
+        validators.push(Validators.email); // custom email validation
       }
-      controls[col.key] = [user[col.key] || '', validators];
+      controls[col.key] = [item[col.key] || '', validators];
     });
     return this.fb.group(controls);
   }
-
-  get usersFormArray(): FormArray {
-    return this.formGroup.get('users') as FormArray;
+  get itemsFormArray(): FormArray {
+    return this.formGroup.get('items') as FormArray;
   }
-
-  onEdit(user: User): void {
-    this.edits.add(user.id);
+  onEdit(index: number): void {
+    this.edits.add(index);
   }
-
-  onSave(user: User, index: number): void {
-    const userGroup = this.usersFormArray.at(index);
-    this.edits.delete(user.id);
-    const updatedUser = { ...user, ...userGroup.value };
-    this.saveUser.emit(updatedUser);
+  onSave(item: T, index: number): void {
+    const itemGroup = this.itemsFormArray.at(index);
+    this.edits.delete(index);
+    const updatedItem = { ...item, ...itemGroup.value };
+    this.saveItem.emit(updatedItem);
   }
-
   isInvalid(controlName: string, index: number) {
-    const control = this.usersFormArray.at(index).get(controlName);
+    const control = this.itemsFormArray.at(index).get(controlName);
     return control?.invalid && control?.touched;
   }
 }

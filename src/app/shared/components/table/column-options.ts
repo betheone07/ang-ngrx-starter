@@ -5,12 +5,12 @@ export interface ColumnOptions {
 
   key: string; //key in the response object for this column
 
-  editable: boolean; //column is editable or not
+  type: string; //type of the field
 
-  readonly?: boolean;
+  editable: boolean; //column is editable or not
 }
 export const columns: ColumnOptions[] = [
-  { name: 'Name', width: '150px', key: 'name', editable: true },
+  { name: 'Name', width: '150px', key: 'name', type: 'text', editable: true },
 
-  { name: 'Email', width: '250px', key: 'email', editable: true }
+  { name: 'Email', width: '250px', key: 'email', type: 'email', editable: true }
 ];
